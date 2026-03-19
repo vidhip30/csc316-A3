@@ -47,10 +47,21 @@ d3.csv("data/spotify_tracks.csv").then(data => {
 
   const genreGroups = ["Pop","Rock/Metal","Hip-Hop/Rap","R&B/Soul","Country/Folk","Electronic/Dance","Other"];
 
-  const x = d3.scaleLinear().domain(d3.extent(data, d => d.tempo)).range([0, width]);
-  const y = d3.scaleLinear().domain([d3.min(data,d=>d.duration), Math.min(500,d3.max(data,d=>d.duration))]).range([height, 0]);
-  const r = d3.scaleLinear().domain([0, d3.max(data,d=>d.popularity)]).range([4,20]);
-  const color = d3.scaleOrdinal().domain(genreGroups).range(d3.schemeTableau10);
+  const x = d3.scaleLinear()
+    .domain(d3.extent(data, d => d.tempo))
+    .range([0, width]);
+
+  const y = d3.scaleLinear()
+    .domain([d3.min(data,d=>d.duration), Math.min(500,d3.max(data,d=>d.duration))])
+    .range([height, 0]);
+
+  const r = d3.scaleLinear()
+    .domain([0, d3.max(data,d=>d.popularity)])
+    .range([4,20]);
+
+  const color = d3.scaleOrdinal()
+    .domain(genreGroups)
+    .range(d3.schemeTableau10);
 
   xAxisGroup.call(d3.axisBottom(x).ticks(12));
   yAxisGroup.call(d3.axisLeft(y).ticks(10));
@@ -91,7 +102,9 @@ d3.csv("data/spotify_tracks.csv").then(data => {
       `);
     })
     .on("mousemove", event => {
-      tooltip.style("left",(event.pageX+10)+"px").style("top",(event.pageY-20)+"px");
+      tooltip
+        .style("left",(event.pageX+10)+"px")
+        .style("top",(event.pageY-20)+"px");
     })
     .on("mouseout", () => tooltip.style("opacity",0));
 
@@ -129,40 +142,51 @@ d3.csv("data/spotify_tracks.csv").then(data => {
     .on("click", function(event,d){
       if(selectedGenres.has(d)) selectedGenres.delete(d);
       else selectedGenres.add(d);
-      legend.selectAll("rect").style("opacity", g => (selectedGenres.size===0 || selectedGenres.has(g))?1:0.3);
+
+      legend.selectAll("rect")
+        .style("opacity", g => (selectedGenres.size===0 || selectedGenres.has(g))?1:0.3);
+
       update();
     });
 
-  legend.append("rect").attr("width",18).attr("height",18).attr("fill", d => color(d));
-  legend.append("text").attr("x",25).attr("y",14).text(d=>d).style("font-size","15px");
+  legend.append("rect")
+    .attr("width",18)
+    .attr("height",18)
+    .attr("fill", d => color(d));
 
-  const brush = d3.brush()
-    .extent([[0,0],[width,height]])
-    .on("end", brushEnded);
+  legend.append("text")
+    .attr("x",25)
+    .attr("y",14)
+    .text(d=>d)
+    .style("font-size","15px");
 
-  svg.append("g").attr("class","brush").call(brush);
+  const zoom = d3.zoom()
+    .scaleExtent([0.5, 10])
+    .translateExtent([[0, 0], [width, height]])
+    .extent([[0, 0], [width, height]])
+    .on("zoom", zoomed);
 
-  function brushEnded(event){
-    if(!event.selection) return;
-    const [[x0,y0],[x1,y1]] = event.selection;
-    x.domain([x.invert(x0), x.invert(x1)]);
-    y.domain([y.invert(y1), y.invert(y0)]);
-    svg.select(".brush").call(brush.move, null);
-    updateChart();
+  svg.call(zoom);
+
+  function zoomed(event) {
+    const transform = event.transform;
+
+    const newX = transform.rescaleX(x);
+    const newY = transform.rescaleY(y);
+
+    xAxisGroup.call(d3.axisBottom(newX));
+    yAxisGroup.call(d3.axisLeft(newY));
+
+    circles
+      .attr("cx", d => newX(d.tempo))
+      .attr("cy", d => newY(d.duration));
   }
 
-  d3.select ("#resetZoom") .on("click", () => {
-x.domain (d3.extent (data, d => d.tempo) );
-y.domain ([d3.min (data, d=>d.duration), Math.min (500, d3.max (data, d=>d. duration) ) ]) ;
-updateChart();
-});
-
-  function updateChart(){
-    xAxisGroup.transition().duration(600).call(d3.axisBottom(x));
-    yAxisGroup.transition().duration(600).call(d3.axisLeft(y));
-    circles.transition().duration(600)
-      .attr("cx", d => x(d.tempo))
-      .attr("cy", d => y(d.duration));
-  }
+  d3.select("#resetZoom").on("click", () => {
+    svg.transition().duration(750).call(
+      zoom.transform,
+      d3.zoomIdentity
+    );
+  });
 
 });
