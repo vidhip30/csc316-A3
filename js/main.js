@@ -108,16 +108,27 @@ d3.csv("data/spotify_tracks.csv").then(data => {
     })
     .on("mouseout", () => tooltip.style("opacity",0));
 
-  function update() {
-    circles.transition().duration(600)
-      .style("opacity", d => {
-        const matchesYear = d.year === currentYear;
-        const matchesSearch = d.track_name.toLowerCase().includes(currentQuery) || d.artist_name.toLowerCase().includes(currentQuery);
-        if (!matchesYear || !matchesSearch) return 0;
-        if (selectedGenres.size === 0) return 0.75;
-        return selectedGenres.has(d.genre_group) ? 1 : 0.1;
-      });
-  }
+    
+function update() {
+  circles
+    .transition()
+    .duration(600)
+    .style("opacity", d => {
+      const matchesYear = d.year === currentYear;
+      const matchesSearch = d.track_name.toLowerCase().includes(currentQuery) || d.artist_name.toLowerCase().includes(currentQuery);
+
+      if (!matchesYear || !matchesSearch) return 0;
+      if (selectedGenres.size === 0) return 0.75;
+      return selectedGenres.has(d.genre_group) ? 1 : 0.1;
+    })
+    .style("pointer-events", d => {
+      const matchesYear = d.year === currentYear;
+      const matchesSearch = d.track_name.toLowerCase().includes(currentQuery) || d.artist_name.toLowerCase().includes(currentQuery);
+
+      if (!matchesYear || !matchesSearch) return "none"; // 👈 KEY FIX
+      return "all";
+    });
+}
 
   update();
 
