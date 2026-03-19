@@ -1,0 +1,59 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>A3 Interative Viz</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
+    <link rel="stylesheet" href="css/styles.css">
+
+</head>
+<body>
+
+<!-- WRAPPER -->
+<div class="container-fluid" style="height: 100vh; padding-top: 1vh">
+    <div class="row">
+        <div class="col-10 offset-1" style="border: thin solid grey; border-radius: 5px;">
+
+            <!-- HEADING -->
+            <div class="row d-flex align-items-center" style="height: 10vh; padding: 0; background: #bcd4e6; border-bottom: thin solid grey">
+                <h1 style="text-align: center">How have songs changed over the years?</h1>
+            </div>
+
+            
+            <input type="text" id="searchBox" placeholder="Search song or artist">
+
+            <label for="yearSlider">Year: <span id="yearValue">2000</span></label><br>
+<input type="range" id="yearSlider" min="2000" max="2020" step="1" value="2000">
+
+<button id="resetZoom">Reset Zoom</button>
+
+  <div id="chart"></div>
+
+  <div id="tooltip" class="tooltip"></div>
+           
+        </div>
+    </div>
+</div>
+
+
+<!-- - - - - - - - - - - - >
+<    Load JS libraries     >
+<- - - - - - - - - - - - -->
+
+<!-- BOOTSTRAP -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3" crossorigin="anonymous"></script>
+
+
+<!-- d3 -->
+<script src="https://d3js.org/d3.v7.min.js"></script>
+
+<script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
+<script src="https://d3js.org/topojson.v2.min.js"></script>
+<script src="https://d3js.org/d3-geo.v1.min.js"></script>
+
+<!-- OWN JS -->
+<script src="js/mapVis.js"></script>
+<script src="js/pieChart.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>

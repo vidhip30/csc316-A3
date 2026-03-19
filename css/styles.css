@@ -1,0 +1,47 @@
+body {
+  font-family: Arial, sans-serif;
+  background: #f8f9fa;
+  text-align: center;
+}
+
+h1 {
+  margin-bottom: 5px;
+}
+
+#searchBox {
+  margin: 15px;
+  padding: 8px;
+  width: 250px;
+  font-size: 14px;
+}
+
+svg {
+  background: white;
+  border: 1px solid #ddd;
+}
+
+circle {
+  fill: steelblue;
+  opacity: 0.6;
+}
+
+circle:hover {
+  stroke: black;
+  stroke-width: 2;
+  opacity: 1;
+}
+
+.tooltip {
+  position: absolute;
+  background: white;
+  border: 1px solid #ccc;
+  padding: 8px;
+  pointer-events: none;
+  opacity: 0;
+  font-size: 12px;
+}
+
+#yearSlider {
+  width: 300px;
+  margin: 10px;
+}
