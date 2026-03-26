@@ -4,7 +4,7 @@ body {
   text-align: center;
 }
 
-h1 {
+h1, h2 {
   margin-bottom: 5px;
 }
 
@@ -31,6 +31,19 @@ circle:hover {
   opacity: 1;
 }
 
+#tooltip {
+    position: absolute;
+    pointer-events: none;   /* So it doesn’t block mouse events */
+    opacity: 0;             /* Start hidden */
+    background-color: rgba(0,0,0,0.8);
+    color: white;
+    padding: 6px 10px;
+    border-radius: 4px;
+    font-size: 12px;
+    z-index: 10;
+    transition: opacity 0.2s;
+}
+
 .tooltip {
   position: absolute;
   background: white;
@@ -46,10 +59,55 @@ circle:hover {
   margin: 10px;
 }
 
+/* CHART + LEGEND */
 #chart {
-    margin-bottom: 5px; /* was bigger before */
+    flex: 4;           /* bigger chart */
+    margin-bottom: 10px;
 }
 
+#legend {
+    flex: 1;           /* smaller legend */
+    min-width: 120px;
+    font-size: 12px;
+}
+
+.legend-item {
+    cursor: pointer;
+    margin: 4px 0;    /* smaller spacing */
+    display: flex;
+    align-items: center;
+    font-size: 12px;
+}
+
+.legend-color {
+    width: 16px;       /* smaller color box */
+    height: 16px;
+    margin-right: 6px;
+    border-radius: 3px;
+}
+
+/* DASHBOARD */
 .stats-container {
-    margin-top: 10px; /* reduce from 25px */
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.stat-card {
+    background: white;
+    padding: 15px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    text-align: center;
+}
+
+.stat-title {
+    font-size: 14px;
+    color: #666;
+}
+
+.stat-value {
+    font-size: 22px;
+    font-weight: bold;
 }
