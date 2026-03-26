@@ -33,9 +33,39 @@
 
         </div>
 
-        <div class="d-flex align-items-center gap-2">
+        <div class="d-flex align-items-center gap-2 mb-2">
             <label class="mb-0">Year: <span id="yearValue">2000</span></label>
             <input type="range" id="yearSlider" min="2000" max="2020" value="2000" style="width: 300px;">
+        </div>
+
+        <div class="d-flex align-items-center gap-2 mb-2 ">
+            <label for="xAxisSelect">X-Axis:</label>
+            <select id="xAxisSelect" class="form-select form-select-sm">
+                <option value="tempo" selected>Tempo</option>
+                <option value="danceability">Danceability</option>
+                <option value="energy">Energy</option>
+                <option value="key">Key</option>
+                <option value="loudness">Loudness</option>
+                <option value="speechiness">Speechiness</option>
+                <option value="acousticness">Acousticness</option>
+                <option value="liveness">Liveness</option>
+                <option value="valence">Valence</option>
+                <option value="duration_ms">Duration (ms)</option>
+            </select>
+
+            <label for="yAxisSelect">Y-Axis:</label>
+            <select id="yAxisSelect" class="form-select form-select-sm">
+                <option value="duration_ms" selected>Duration (ms)</option>
+                <option value="tempo">Tempo</option>
+                <option value="danceability">Danceability</option>
+                <option value="energy">Energy</option>
+                <option value="key">Key</option>
+                <option value="loudness">Loudness</option>
+                <option value="speechiness">Speechiness</option>
+                <option value="acousticness">Acousticness</option>
+                <option value="liveness">Liveness</option>
+                <option value="valence">Valence</option>
+            </select>
         </div>
 
     </div>
