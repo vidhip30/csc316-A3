@@ -2,58 +2,142 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>A3 Interative Viz</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
-    <link rel="stylesheet" href="css/styles.css">
+    <title>Spotify Visualization</title>
 
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        body {
+            background: #f5f7fa;
+        }
+
+        #tooltip {
+            position: absolute;
+            background: white;
+            padding: 10px;
+            border-radius: 6px;
+            pointer-events: none;
+            opacity: 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        /* BIGGER CHART */
+        #chart {
+            width: 100%;
+        }
+
+        /* DASHBOARD */
+        .stats-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 15px;
+            margin-top: 25px;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 15px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            text-align: center;
+        }
+
+        .stat-title {
+            font-size: 14px;
+            color: #666;
+        }
+
+        .stat-value {
+            font-size: 22px;
+            font-weight: bold;
+        }
+
+        #instructions {
+            margin: 10px 0 15px 0;
+            color: #444;
+        }
+    </style>
 </head>
+
 <body>
 
-<!-- WRAPPER -->
-<div class="container-fluid" style="height: 100vh; padding-top: 1vh">
-    <div class="row">
-        <div class="col-10 offset-1" style="border: thin solid grey; border-radius: 5px;">
+<div class="container">
 
-            <!-- HEADING -->
-            <div class="row d-flex align-items-center" style="height: 10vh; padding: 0; background: #bcd4e6; border-bottom: thin solid grey">
-                <h1 style="text-align: center">How have songs changed over the years?</h1>
-            </div>
+    <h2 class="text-center mt-3">🎵 How Have Songs Changed Over Time?</h2>
 
-            
-            <input type="text" id="searchBox" placeholder="Search song or artist">
-
-            <label for="yearSlider">Year: <span id="yearValue">2000</span></label><br>
-<input type="range" id="yearSlider" min="2000" max="2020" step="1" value="2000">
-
-<button id="resetZoom">Reset Zoom</button>
-
-  <div id="chart"></div>
-
-  <div id="tooltip" class="tooltip"></div>
-           
-        </div>
+    <!-- SHORT INSTRUCTIONS -->
+    <div id="instructions" class="text-center">
+        Hover to explore songs, click to search on Spotify, hover over song and pinch to zoom, and use filters to explore trends over time.
     </div>
+
+    <!-- CONTROLS -->
+   <div class="d-flex flex-column align-items-center mb-3">
+
+    <!-- Top row: search + buttons -->
+    <div class="d-flex align-items-center gap-2 mb-2">
+
+        <input type="text" id="searchBox"
+               placeholder="Search song or artist"
+               class="form-control"
+               style="width: 250px;">
+
+        <button id="resetZoom" class="btn btn-secondary">Reset Zoom</button>
+
+        <button id="playYears" class="btn btn-primary">▶ Play</button>
+
+    </div>
+
+    <!-- Bottom row: slider centered -->
+    <div class="d-flex align-items-center gap-2">
+        <label class="mb-0">Year: <span id="yearValue">2000</span></label>
+        <input type="range" id="yearSlider" min="2000" max="2020" value="2000" style="width: 300px;">
+    </div>
+
+</div>
+    <!-- BIG CHART -->
+    <div class="d-flex align-items-start gap-3">
+
+    <!-- CHART (dominant) -->
+    <div id="chart" style="flex: 3;"></div>
+
+    <!-- DASHBOARD -->
+    <div id="dashboard" class="stats-container" style="flex: 1; min-width: 220px;">
+
+        <div class="stat-card">
+            <div class="stat-title">Songs</div>
+            <div class="stat-value" id="stat-count">-</div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-title">Avg Tempo</div>
+            <div class="stat-value" id="stat-tempo">-</div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-title">Avg Duration</div>
+            <div class="stat-value" id="stat-duration">-</div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-title">Popularity</div>
+            <div class="stat-value" id="stat-popularity">-</div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-title">Top Song</div>
+            <div class="stat-value" id="stat-song">-</div>
+        </div>
+
+    </div>
+
 </div>
 
+    <div id="tooltip"></div>
 
-<!-- - - - - - - - - - - - >
-<    Load JS libraries     >
-<- - - - - - - - - - - - -->
+</div>
 
-<!-- BOOTSTRAP -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3" crossorigin="anonymous"></script>
-
-
-<!-- d3 -->
 <script src="https://d3js.org/d3.v7.min.js"></script>
-
-<script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
-<script src="https://d3js.org/topojson.v2.min.js"></script>
-<script src="https://d3js.org/d3-geo.v1.min.js"></script>
-
-<!-- OWN JS -->
-<script src="js/mapVis.js"></script>
-<script src="js/pieChart.js"></script>
 <script src="js/main.js"></script>
+
 </body>
 </html>

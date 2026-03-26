@@ -45,3 +45,11 @@ circle:hover {
   width: 300px;
   margin: 10px;
 }
+
+#chart {
+    margin-bottom: 5px; /* was bigger before */
+}
+
+.stats-container {
+    margin-top: 10px; /* reduce from 25px */
+}
