@@ -14,15 +14,12 @@
 
     <h2 class="text-center mt-3">🎵 How Have Songs Changed Over Time?</h2>
 
-    <!-- SHORT INSTRUCTIONS -->
     <div id="instructions" class="text-center">
-        Hover to explore songs, click to search on Spotify, hover over song and pinch to zoom, and use filters to explore trends over time.
+        Hover to explore songs, click to search on Spotify, hover over song and pinch to zoom, and use click genres to filter.
     </div>
 
-    <!-- CONTROLS -->
     <div class="d-flex flex-column align-items-center mb-3">
 
-        <!-- Top row: search + buttons -->
         <div class="d-flex align-items-center gap-2 mb-2">
 
             <input type="text" id="searchBox"
@@ -36,7 +33,6 @@
 
         </div>
 
-        <!-- Bottom row: slider centered -->
         <div class="d-flex align-items-center gap-2">
             <label class="mb-0">Year: <span id="yearValue">2000</span></label>
             <input type="range" id="yearSlider" min="2000" max="2020" value="2000" style="width: 300px;">
@@ -44,20 +40,16 @@
 
     </div>
 
-    <!-- CHART + LEGEND -->
     <div class="d-flex align-items-start gap-3">
 
-        <!-- CHART -->
         <div id="chart"></div>
 
-        <!-- GENRE LEGEND -->
         <div id="legend">
             <h5 style="font-size:14px; margin-bottom:8px;">Genres</h5>
         </div>
 
     </div>
 
-    <!-- DASHBOARD BELOW CHART -->
     <div id="dashboard" class="stats-container">
 
         <div class="stat-card">

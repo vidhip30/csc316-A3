@@ -20,6 +20,40 @@ const chartGroup = svg.append("g");
 const xAxisGroup = svg.append("g").attr("transform", `translate(0, ${height})`);
 const yAxisGroup = svg.append("g");
 
+svg.append("text")
+    .attr("class", "x axis-label")
+    .attr("x", width / 2)
+    .attr("y", height + 50)
+    .attr("text-anchor", "middle")
+    .style("font-size", "16px")
+    .text("Tempo (BPM)");
+
+svg.append("text")
+    .attr("class", "y axis-label")
+    .attr("x", -height / 2)
+    .attr("y", -60)
+    .attr("transform", "rotate(-90)")
+    .attr("text-anchor", "middle")
+    .style("font-size", "16px")
+    .text("Duration (seconds)");
+
+svg.append("text")
+    .attr("class", "x axis-label")
+    .attr("x", width / 2)
+    .attr("y", height + 50)
+    .attr("text-anchor", "middle")
+    .style("font-size", "16px")
+    .text("Tempo (BPM)");
+
+svg.append("text")
+    .attr("class", "y axis-label")
+    .attr("x", -height / 2)        
+    .attr("y", -60)
+    .attr("transform", "rotate(-90)")
+    .attr("text-anchor", "middle")
+    .style("font-size", "16px")
+    .text("Duration (seconds)");
+
 d3.csv("data/spotify_tracks.csv").then(data => {
 
   data.forEach(d => {
@@ -51,9 +85,9 @@ d3.csv("data/spotify_tracks.csv").then(data => {
     .domain([d3.min(data,d=>d.duration), Math.min(500,d3.max(data,d=>d.duration))])
     .range([height, 0]);
 
-  const r = d3.scaleLinear()
+  const r = d3.scalePow().exponent(2)
     .domain([0, d3.max(data,d=>d.popularity)])
-    .range([4,20]);
+    .range([10,40]);
 
   const color = d3.scaleOrdinal()
     .domain(genreGroups)
@@ -73,7 +107,6 @@ d3.csv("data/spotify_tracks.csv").then(data => {
     .style("opacity", 0.7)
     .style("cursor", "pointer");
 
-  // CIRCLE INTERACTIONS
   circles
     .on("mouseover", (event,d) => {
       tooltip.style("opacity",1).html(`
@@ -95,7 +128,6 @@ d3.csv("data/spotify_tracks.csv").then(data => {
       d3.select(this).style("stroke", "gold").style("stroke-width", 3);
     });
 
-  // DASHBOARD
   function updateDashboard(yearData) {
     if (yearData.length === 0) return;
 
@@ -113,7 +145,6 @@ d3.csv("data/spotify_tracks.csv").then(data => {
       .attr("stroke-width", d => d.track_id === topTrack.track_id ? 3 : 0);
   }
 
-  // UPDATE FUNCTION
   function update() {
     const yearData = data.filter(d => d.year === currentYear);
 
@@ -141,7 +172,6 @@ d3.csv("data/spotify_tracks.csv").then(data => {
 
   update();
 
-  // FILTERS
   d3.select("#yearSlider").on("input", function() {
     currentYear = +this.value;
     d3.select("#yearValue").text(currentYear);
@@ -153,7 +183,6 @@ d3.csv("data/spotify_tracks.csv").then(data => {
     update();
   });
 
-  // PLAY TIMELINE
   let playing = false;
 let playInterval = null;
 
@@ -163,14 +192,14 @@ d3.select("#playYears").on("click", () => {
   if (!playing) {
     // Start playing
     playing = true;
-    button.text("Pause");  // Change text to Pause
+    button.text("Pause");
 
     let year = currentYear;
     playInterval = setInterval(() => {
       if (year > 2020 || !playing) {
         clearInterval(playInterval);
         playing = false;
-        button.text("Play");  // Reset text
+        button.text("Play");
         return;
       }
       currentYear = year;
@@ -178,10 +207,9 @@ d3.select("#playYears").on("click", () => {
       d3.select("#yearValue").text(year);
       update();
       year++;
-    }, 1400);
+    }, 1200);
 
   } else {
-    // Pause playing
     playing = false;
     button.text("Play");
     clearInterval(playInterval);
@@ -207,7 +235,6 @@ d3.select("#playYears").on("click", () => {
     svg.transition().duration(750).call(zoom.transform, d3.zoomIdentity);
   });
 
-  // GENRE LEGEND
   const legend = d3.select("#legend");
   genreGroups.forEach(genre => {
     const item = legend.append("div").attr("class","legend-item");
